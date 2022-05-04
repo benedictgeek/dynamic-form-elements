@@ -78,7 +78,7 @@ function App() {
         {formInputs.length > 0 && (
           <input
             type={"submit"}
-            value={isUploadingImage ? "Uploading image..." : isSubmitting ? "Submitting..." : "Submit answers"}
+            value={isUploadingImage ? "Uploading file..." : isSubmitting ? "Submitting..." : "Submit answers"}
           />
         )}
       </form>
