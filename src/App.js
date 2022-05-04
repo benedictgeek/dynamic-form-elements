@@ -1,23 +1,87 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useMemo } from "react";
+
+import "./App.css";
+import { useApp } from "./useApp";
 
 function App() {
+  const {
+    questions,
+    formRef,
+    handleChange,
+    handleFileUpload,
+    onSubmit,
+    isUploadingImage,
+    isSubmitting
+  } = useApp();
+
+  const formInputs = useMemo(() => {
+    let inputElements = [];
+
+    questions.forEach((question) => {
+      let element;
+      switch (question.type) {
+        case "number":
+        case "date":
+        case "text":
+          element = (
+            <div key={question.id}>
+              {/* The title of an input was null so i default to description */}
+              <label htmlFor={question.id}>
+                {question.title || question.description}
+              </label>
+              <input
+                name={question.id}
+                type={question.type}
+                defaultValue=""
+                placeholder={question.description}
+                onChange={(e) => handleChange(e, question)}
+                required
+              />
+            </div>
+          );
+          break;
+        case "image":
+        case "video":
+          element = (
+            <div key={question.id}>
+              <label htmlFor={question.id}>{question.description}</label>
+              <input
+                type="file"
+                defaultValue=""
+                name={question.id}
+                accept={`${question.type}/*`}
+                onChange={(e) => handleFileUpload(e, question)}
+                required
+              />
+            </div>
+          );
+
+          break;
+        default:
+          break;
+      }
+
+      if (element) {
+        inputElements.push(element);
+      }
+    });
+
+    return inputElements;
+  }, [questions]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="appContainer">
+      <header className="header">Dynamic Inputs Project</header>
+      <form onSubmit={onSubmit} ref={formRef}>
+        {formInputs}
+
+        {formInputs.length > 0 && (
+          <input
+            type={"submit"}
+            value={isUploadingImage ? "Uploading image..." : isSubmitting ? "Submitting..." : "Submit answers"}
+          />
+        )}
+      </form>
     </div>
   );
 }
