@@ -11,6 +11,7 @@ export const useApp = () => {
   const [answers, setAnswers] = useState({});
   const [isUploadingImage, setIsUploading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isFetching, setIsFetching] = useState(true);
 
   const formRef = createRef();
 
@@ -30,6 +31,7 @@ export const useApp = () => {
         throw data;
       }
       setQuestions(data.data);
+      setIsFetching(false);
     } catch (error) {
       alert("Could not fetch questions. Please reload the page");
     }
@@ -125,5 +127,6 @@ export const useApp = () => {
     onSubmit,
     isUploadingImage,
     isSubmitting,
+    isFetching
   };
 };

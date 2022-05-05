@@ -11,7 +11,8 @@ function App() {
     handleFileUpload,
     onSubmit,
     isUploadingImage,
-    isSubmitting
+    isSubmitting,
+    isFetching,
   } = useApp();
 
   const formInputs = useMemo(() => {
@@ -72,13 +73,20 @@ function App() {
   return (
     <div className="appContainer">
       <header className="header">Dynamic Inputs Project</header>
+      {isFetching && <div>Loading form, please wait...</div>}
       <form onSubmit={onSubmit} ref={formRef}>
         {formInputs}
 
         {formInputs.length > 0 && (
           <input
             type={"submit"}
-            value={isUploadingImage ? "Uploading file..." : isSubmitting ? "Submitting..." : "Submit answers"}
+            value={
+              isUploadingImage
+                ? "Uploading file..."
+                : isSubmitting
+                ? "Submitting..."
+                : "Submit answers"
+            }
           />
         )}
       </form>
